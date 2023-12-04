@@ -1,19 +1,3 @@
-#! /usr/local/bin/python
-
-# Mattermost Message Formatter - Email Markdown Removal
-
-# Copyright (c) 2023 Maxwell Power
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without
-# restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom
-# the Software is furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
-# AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 # -*- coding: utf-8 -*-
 
 VERSION = "1.0.0"
@@ -41,7 +25,7 @@ CHANNEL_ID = os.environ.get('CHANNEL_ID', None)
 COMMIT_MODE = os.environ.get('COMMIT_MODE', 'false').lower() == 'true'
 DEBUG = os.environ.get('DEBUG', 'false').lower() == 'true'
 
-logging.info(f"Starting mm-mdfix v{VERSION} ...")
+logging.info(f"Starting mm-mdfix-EMAIL v{VERSION} ...")
 if COMMIT_MODE:
     logging.info("COMMIT MODE: ENABLED")
 else:
@@ -88,7 +72,7 @@ if DEBUG:
 # Function to remove Markdown from email addresses
 def remove_markdown_from_emails(content):
     email_pattern = r'\[([^\]]+)\]\(mailto:([^\)]+)\)'
-    return re.sub(email_pattern, lambda match: match.group(2), content)
+    return re.sub(email_pattern, r'\2', content)
 
 # Function to process each match
 def format_code_blocks(message):
@@ -97,7 +81,7 @@ def format_code_blocks(message):
     def process_match(match):
         content = match.group(1)
         content = remove_markdown_from_emails(content)
-        return f"```\n{content}\n```"
+        return f"```{content}```"
 
     return re.sub(pattern, process_match, message)
 
