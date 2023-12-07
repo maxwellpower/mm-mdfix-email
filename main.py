@@ -1,6 +1,20 @@
+# Mattermost Message Formatter - Email Markdown Removal
+
+# Copyright (c) 2023 Maxwell Power
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without
+# restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom
+# the Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+# AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 # -*- coding: utf-8 -*-
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 
 import os
 import re
@@ -25,7 +39,7 @@ CHANNEL_ID = os.environ.get('CHANNEL_ID', None)
 COMMIT_MODE = os.environ.get('COMMIT_MODE', 'false').lower() == 'true'
 DEBUG = os.environ.get('DEBUG', 'false').lower() == 'true'
 
-logging.info(f"Starting mm-mdfix-EMAIL v{VERSION} ...")
+logging.info(f"Starting mm-mdfix-email v{VERSION} ...")
 if COMMIT_MODE:
     logging.info("COMMIT MODE: ENABLED")
 else:
@@ -114,8 +128,7 @@ for record in cursor:
                     if updated_message.strip() == formatted_message.strip():
                         logging.info(f"Post ID: {post_id} - Update verified successfully.")
                     else:
-                        logging.critical(f"Post ID: {post_id} - Update verification failed. The message in the database does not match the expected formatted message.")
-                        exit(1)
+                        logging.error(f"Post ID: {post_id} - Update verification failed. The message in the database does not match the expected formatted message.")
 
                 except Exception as e:
                     logging.error(f"Error while committing Post ID: {post_id}. Error: {e}")
@@ -131,5 +144,4 @@ else:
 
 # Close the cursors and the connection
 cursor.close()
-update_cursor.close()
-conn.close()
+update_cursor.close
